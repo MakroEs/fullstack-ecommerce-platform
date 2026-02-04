@@ -1,5 +1,13 @@
-const PageContainer = ({ children }: { children: React.ReactNode }) => {
-  return <div className="px-3 md:px-10 ">{children}</div>;
-};
+"use client";
 
-export default PageContainer;
+import { CartContextProvider } from "@/hooks/UseCart";
+import { Toaster } from "react-hot-toast";
+
+export default function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <div>
+      <Toaster />
+      {children}
+    </div>
+  );
+}

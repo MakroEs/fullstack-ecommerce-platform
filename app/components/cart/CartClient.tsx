@@ -4,13 +4,26 @@ import UseCart from "@/hooks/UseCart";
 import PageContainer from "../containers/PageContainer";
 import Image from "next/image";
 import Button from "@/app/general/Button";
+import { CardProductProps } from "../detail/DetailClient";
+import Counter from "@/app/general/Counter";
 
 const CartClient = () => {
-  const { cartPrdcts } = UseCart();
+  const {
+    cartPrdcts,
+    removeFromCard,
+    removeCart,
+    addToBasketIncrease,
+    addToBasketDeccrease,
+  } = UseCart();
   console.log(cartPrdcts);
   if (!cartPrdcts || cartPrdcts.length == 0) {
     return <div>Sepetinizde ürün bulunmamaktadır.</div>;
   }
+
+  let cartPrdctsTotal = cartPrdcts.reduce(
+    (acc: any, item: CardProductProps) => acc + item.quantity * item.price,
+    0,
+  );
   return (
     <div className="my-3 md:my-10">
       <PageContainer>
@@ -36,13 +49,30 @@ const CartClient = () => {
                 />
               </div>
               <div className="w-1/5">{cart.name}</div>
-              <div className="w-1/5">2</div>
+              <div className="w-1/5 flex justify-center">
+                <Counter
+                  cardProduct={cart}
+                  increaseFunc={() => addToBasketIncrease(cart)}
+                  decreaseFunc={() => addToBasketDeccrease(cart)}
+                />
+              </div>
               <div className="w-1/5 text-orange-600 text-lg">{cart.price}</div>
               <div className="w-1/5 ">
-                <Button text="ürünü sil" onClick={() => {}} />
+                <Button text="ürünü sil" onClick={() => removeFromCard(cart)} />
               </div>
             </div>
           ))}
+        </div>
+        <div className="flex items-center justify-between my-5 py-5 border-t-2">
+          <button
+            onClick={() => removeCart()}
+            className="w-1/5 underline text-sm"
+          >
+            Sepeti Sil
+          </button>
+          <div className="text-lg md:text-2xl text-orange-600 font-bold">
+            {cartPrdctsTotal}₺
+          </div>
         </div>
       </PageContainer>
     </div>
